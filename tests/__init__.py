@@ -53,6 +53,7 @@ class FieldsTest(unittest.TestCase):
         class Article(Document):
             title = StringField()
             slug = AutoSlugField()
+        
         first_doc = Article()
         first_doc.slug = 'My document title'
         first_doc.validate()
@@ -74,6 +75,18 @@ class FieldsTest(unittest.TestCase):
         third_doc.slug = 'My document title'
         third_doc.save()
         self.assertEqual(third_doc.slug, 'my-document-title-2')
+    
+    def test_auto_slug_nonalphachars(self):
+        """Ensure that the slug generator cleans up all non-alpha characters.
+        """
+        class Article(Document):
+            title = StringField()
+            slug = AutoSlugField()
+        
+        article = Article()
+        article.slug = " Here's a nice headline, enjoy it?/"
+        article.save()
+        self.assertEqual(article.slug, "heres-a-nice-headline-enjoy-it")
     
 
 if __name__ == '__main__':
