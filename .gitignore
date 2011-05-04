@@ -21,6 +21,8 @@
 *.rar
 *.tar
 *.zip
+*.egg
+*.egg-info
 
 # Logs and databases #
 ######################
