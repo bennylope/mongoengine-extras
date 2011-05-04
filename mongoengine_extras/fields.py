@@ -48,7 +48,10 @@ class AutoSlugField(SlugField):
         collection = instance.__class__.objects._collection
         slug = slugify(value)
         slug_regex = '^%s' % slug
-        existing_docs = collection.find({self.db_field: {'$regex':slug_regex}})
+        existing_docs = [
+            {'id': doc['_id'], self.db_field: doc[self.db_field]} for doc in 
+            collection.find({self.db_field: {'$regex':slug_regex}})
+        ]
         matches = [int(re.search(r'-[\d]+$', doc[self.db_field]).group()[-1:])
             for doc in existing_docs if re.search(r'-[\d]+$', doc[self.db_field])]
         
@@ -58,7 +61,7 @@ class AutoSlugField(SlugField):
         # (3) A matching document is found but without any number
         # (4) A matching document is found with an incrementing value
         next = 1
-        if existing_docs.count() == 0:
+        if len(existing_docs) == 0:
             return slug
         elif instance.id in [doc['id'] for doc in existing_docs]:
             return slug
