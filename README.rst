@@ -12,3 +12,19 @@ incremented slug value. It should be used in the same way as the
 AutoSlugField in django-extensions, although it's not quite there yet. For
 now you simply provide the field with the source string and the field will
 store a unique, auto-incremented slug.
+
+Installing
+===========
+
+With setuptools installed, `python setup.py install` from source.
+
+Dependencies
+============
+
+mongoengine-extras requires MongoEngine (which requires pymongo).
+
+Tests
+=====
+
+The tests can by run with `python setup.py test`. Tests require a MongoDB 
+database running on the standard port.
