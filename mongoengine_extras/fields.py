@@ -64,7 +64,7 @@ class AutoSlugField(SlugField):
         if len(existing_docs) == 0:
             return slug
         elif instance.id in [doc['id'] for doc in existing_docs]:
-            return slug
+            return instance[self.db_field]
         elif not matches:
             return u'%s-%s' % (slug, next)
         else:
