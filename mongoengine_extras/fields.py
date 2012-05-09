@@ -20,7 +20,7 @@ class AutoSlugField(SlugField):
     """A field that that produces a slug from the inputs and auto-
     increments the slug if the value already exists."""
     
-    def __int__(self, db_field=None, name=None, required=False, default=None, 
+    def __init__(self, db_field=None, name=None, required=False, default=None, 
                  unique_with=None, primary_key=False,
                  validation=None, choices=None, populate_from=None):
         # This is going to be a unique field no matter what
