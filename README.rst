@@ -16,7 +16,13 @@ store a unique, auto-incremented slug.
 Installing
 ===========
 
-With setuptools installed, `python setup.py install` from source.
+Use pip::
+
+    pip install mongoengine-extras
+
+Or download the source::
+
+    python setup.py install
 
 Dependencies
 ============
@@ -28,3 +34,14 @@ Tests
 
 The tests can by run with `python setup.py test`. Tests require a MongoDB 
 database running on the standard port.
+
+Authors
+=======
+
+* Ben Lopatin (`bennylope <https://github.com/bennylope>`_)
+* Esteban Feldman (`eka <https://github.com/eka>`_)
+
+License
+=======
+
+Public domain
