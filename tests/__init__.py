@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from mongoengine import *
@@ -9,13 +10,15 @@ from mongoengine_extras.fields import SlugField, AutoSlugField
 class FieldsTest(unittest.TestCase):
 
     def setUp(self):
-        connect(db='mongoenginetest')
+        host = os.environ.get('MONGO_HOST', 'localhost')
+        port = os.environ.get('MONGO_PORT', 27017)
+        connect(db='mongoenginetest', host=host, port=port)
         self.db = _get_db()
-    
+
     def tearDown(self):
         connection = _get_connection()
         connection.drop_database(_get_db())
-    
+
     def test_slug_validation(self):
         """Ensure that SlugFields validates slug entries.
         """
@@ -43,7 +46,7 @@ class FieldsTest(unittest.TestCase):
     def test_auto_slug_creation(self):
         """Ensure that slugs are automatically created and kept unique.
         """
-        
+
         # Four scenarios:
         # (1) No match is found, this is a brand new slug
         # (2) A matching document is found, but it's this one
@@ -53,41 +56,74 @@ class FieldsTest(unittest.TestCase):
         class Article(Document):
             title = StringField()
             slug = AutoSlugField()
-        
+
         first_doc = Article()
         first_doc.slug = 'My document title'
         first_doc.validate()
         first_doc.save()
         self.assertEqual(first_doc.slug, 'my-document-title')
-        
+
         # Shouldn't be increasing the count if the document instance
-        # is already counted. 
+        # is already counted.
         first_doc.slug = 'my-document-title'
         first_doc.save()
         self.assertEqual(first_doc.slug, 'my-document-title')
-        
+
         second_doc = Article()
         second_doc.slug = 'My document title'
         second_doc.save()
         self.assertEqual(second_doc.slug, 'my-document-title-1')
-                
+
         third_doc = Article()
         third_doc.slug = 'My document title'
         third_doc.save()
         self.assertEqual(third_doc.slug, 'my-document-title-2')
-    
+
     def test_auto_slug_nonalphachars(self):
         """Ensure that the slug generator cleans up all non-alpha characters.
         """
         class Article(Document):
             title = StringField()
             slug = AutoSlugField()
-        
+
         article = Article()
         article.slug = " Here's a nice headline, enjoy it?/"
         article.save()
         self.assertEqual(article.slug, "heres-a-nice-headline-enjoy-it")
-    
+
+    def test_auto_slug_populatefrom(self):
+        """Ensure that slugs are automatically created and kept unique.
+        """
+        class Article(Document):
+            title = StringField()
+            slug = AutoSlugField(populate_from='title')
+
+        first_doc = Article()
+        first_doc.title = 'My document title'
+        first_doc.validate()
+        first_doc.save()
+        self.assertEqual(first_doc.slug, 'my-document-title')
+
+        # Shouldn't be increasing the count if the document instance
+        # is already counted.
+        first_doc.title = 'my-document-title'
+        first_doc.save()
+        self.assertEqual(first_doc.slug, 'my-document-title')
+
+        second_doc = Article()
+        second_doc.title = 'My document title'
+        second_doc.save()
+        self.assertEqual(second_doc.slug, 'my-document-title-1')
+
+        third_doc = Article()
+        third_doc.title = 'My document title'
+        third_doc.save()
+        self.assertEqual(third_doc.slug, 'my-document-title-2')
+
+        article = Article()
+        article.title = " Here's a nice headline, enjoy it?/"
+        article.save()
+        self.assertEqual(article.slug, "heres-a-nice-headline-enjoy-it")
 
 if __name__ == '__main__':
     unittest.main()
