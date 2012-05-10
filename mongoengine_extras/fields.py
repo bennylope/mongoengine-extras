@@ -77,7 +77,7 @@ class AutoSlugField(SlugField):
         """
         # TODO: raise an error if the value is not string or unicode
         value = unicode(value)
-        if not instance._data.get('title'):
+        if not instance._data.get(self.populate_from):
             value = self._generate_slug(instance, value)
         instance._data[self.name] = value
 
