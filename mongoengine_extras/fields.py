@@ -25,7 +25,6 @@ class AutoSlugField(SlugField):
                  validation=None, choices=None, populate_from=None):
         # This is going to be a unique field no matter what
         self.unique = True
-        self.populate_from = populate_from
         super(AutoSlugField, self).__init__(db_field=db_field, name=name,
                     required=required, default=default,
                     unique_with=unique_with, primary_key=primary_key,
@@ -77,16 +76,7 @@ class AutoSlugField(SlugField):
         """
         # TODO: raise an error if the value is not string or unicode
         value = unicode(value)
-        if not instance._data.get(self.populate_from) and not hasattr(instance, '_id'):
-            value = self._generate_slug(instance, value)
-        instance._data[self.name] = value
+        instance._data[self.name] = self._generate_slug(instance, value)
 
-    def __get__(self, instance, owner):
-        if self.populate_from and not instance.id:
-            value = instance._data.get(self.populate_from)
-            if value:
-                value = unicode(value)
-                instance._data[self.name] = self._generate_slug(instance, value)
-        return super(AutoSlugField, self).__get__(instance, owner)
-
-
+    def validate(self, value):
+        super(AutoSlugField, self).validate(value)
