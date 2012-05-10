@@ -124,6 +124,18 @@ class FieldsTest(unittest.TestCase):
         article.title = " Here's a nice headline, enjoy it?/"
         article.save()
         self.assertEqual(article.slug, "heres-a-nice-headline-enjoy-it")
+        # test assign slug directly
+        foo = Article()
+        foo.slug = 'This is not populated'
+        foo.save()
+        self.assertEqual(foo.slug, "this-is-not-populated")
+        foo = Article()
+        foo.slug = 'This is not populated'
+        foo.save()
+        self.assertEqual(foo.slug, "this-is-not-populated-1")
+        # test a query
+        article = Article.objects.get(slug="heres-a-nice-headline-enjoy-it")
+        self.assertEqual(article.slug, "heres-a-nice-headline-enjoy-it")
 
 if __name__ == '__main__':
     unittest.main()

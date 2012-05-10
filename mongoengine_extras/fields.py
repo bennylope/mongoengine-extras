@@ -76,8 +76,10 @@ class AutoSlugField(SlugField):
         """Descriptor for assigning a value to a field in a document.
         """
         # TODO: raise an error if the value is not string or unicode
-        value = u'%s' % value
-        instance._data[self.name] = self._generate_slug(instance, value)
+        value = unicode(value)
+        if not instance._data.get('title'):
+            value = self._generate_slug(instance, value)
+        instance._data[self.name] = value
 
     def __get__(self, instance, owner):
         if self.populate_from and not instance.id:
@@ -87,6 +89,4 @@ class AutoSlugField(SlugField):
                 instance._data[self.name] = self._generate_slug(instance, value)
         return super(AutoSlugField, self).__get__(instance, owner)
 
-    def validate(self, value):
-        super(AutoSlugField, self).validate(value)
 
