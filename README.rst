@@ -2,6 +2,13 @@
 mongoengine-extras
 ====================
 
+**This project is no longer actively supported. Use the latest `django-extensions <https://github.com/django-extensions/django-extensions>`_ instead - now supports Mongo!**
+    
+If you really want to use an actively supported, PyPI-based version of this project, contact me about taking on project ownerhip.
+
+Overview
+========
+
 mongoengine-extras is a collection of fields (and possibly other features 
 later) not included in MongoEngine, and which do not necessarily need to
 be included in MongoEngine.
