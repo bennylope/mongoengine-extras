@@ -6,7 +6,6 @@ HYPHENATE_REGEXP = re.compile(r'[-\s]+')
 
 
 def slugify(value):
-    import unicodedata
     if not isinstance(value, unicode):
         value = unicode(value)
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
