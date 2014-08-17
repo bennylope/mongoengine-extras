@@ -59,6 +59,3 @@ class AutoSlugField(SlugField):
             signals.pre_save.connect(create_slug_signal, sender=owner)
 
         return super(AutoSlugField, self).__get__(instance, owner)
-
-    def validate(self, value):
-        super(AutoSlugField, self).validate(value)
